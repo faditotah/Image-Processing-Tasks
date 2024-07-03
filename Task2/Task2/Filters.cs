@@ -136,26 +136,6 @@ namespace Task2
                         }
                     }
                 }
-                /*
-                for (int y = 0; y < heightB; ++y)
-                {
-                    for (int x = 0; x < widthB; ++x)
-                    {
-                        pN[x + y * strideN] = pB[x + y * strideB];
-                    }
-                    //pN += nOffsetN;
-                    //pB += nOffsetB;
-                }
-                for (int y = 0; y < heightC; ++y)
-                {
-                    for (int x = 0; x < widthC; ++x)
-                    {
-                        pN[(widthB+ x) + y * strideN] = pC[x + y * strideC];
-                    }
-                    //pN += nOffsetN;
-                    //pC += nOffsetC;
-                }
-                */
             }
             b8.UnlockBits(bmDataB);
             c8.UnlockBits(bmDataC);
@@ -251,23 +231,6 @@ namespace Task2
                         }
                     }
                 }
-                /*
-                for (int y = 0; y < b.Height; ++y)
-                {
-                    for (int x = 0; x < b.Width; ++x)
-                    {
-                        pN[x + y * bmDataN.Stride] = pB[x + y * bmDataB.Stride];
-                    }
-
-                }
-                for (int y = 0; y < c.Height; ++y)
-                {
-                    for (int x = 0; x < c.Width; ++x)
-                    {
-                        pN[(x + (b.Height + y) * bmDataN.Stride)] = pC[x + y * bmDataC.Stride];
-                    }
-                }
-                */
             }
             b8.UnlockBits(bmDataB);
             c8.UnlockBits(bmDataC);
