@@ -1,6 +1,0 @@
-/home/fadi/Desktop/Assignments/Task1/Task1/Task1/Task1/bin/Debug/Task1.exe
-/home/fadi/Desktop/Assignments/Task1/Task1/Task1/Task1/bin/Debug/Task1.pdb
-/home/fadi/Desktop/Assignments/Task1/Task1/Task1/Task1/obj/x86/Debug/Task1.csproj.AssemblyReference.cache
-/home/fadi/Desktop/Assignments/Task1/Task1/Task1/Task1/obj/x86/Debug/Task1.csproj.CoreCompileInputs.cache
-/home/fadi/Desktop/Assignments/Task1/Task1/Task1/Task1/obj/x86/Debug/Task1.exe
-/home/fadi/Desktop/Assignments/Task1/Task1/Task1/Task1/obj/x86/Debug/Task1.pdb
