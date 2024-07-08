@@ -1,6 +1,0 @@
-/home/fadi/Desktop/CompiledTasks/CompiledTasks/CompiledTasks/obj/x86/Debug/CompiledTasks.csproj.AssemblyReference.cache
-/home/fadi/Desktop/CompiledTasks/CompiledTasks/CompiledTasks/obj/x86/Debug/CompiledTasks.csproj.CoreCompileInputs.cache
-/home/fadi/Desktop/CompiledTasks/CompiledTasks/CompiledTasks/bin/Debug/CompiledTasks.exe
-/home/fadi/Desktop/CompiledTasks/CompiledTasks/CompiledTasks/bin/Debug/CompiledTasks.pdb
-/home/fadi/Desktop/CompiledTasks/CompiledTasks/CompiledTasks/obj/x86/Debug/CompiledTasks.exe
-/home/fadi/Desktop/CompiledTasks/CompiledTasks/CompiledTasks/obj/x86/Debug/CompiledTasks.pdb
