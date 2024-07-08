@@ -51,6 +51,58 @@ namespace Task2
             bit8.UnlockBits(newBmpData);
             return bit8;
         } 
+
+        public static Bitmap Convert1bit(Bitmap b)
+        {
+            int width = b.Width;
+            int height = b.Height;
+            
+            Bitmap newImage = new Bitmap(width, height, PixelFormat.Format8bppIndexed);
+
+            ColorPalette palette = newImage.Palette;
+            for (int i = 0; i < 256; i++)
+            {
+                palette.Entries[i] = Color.FromArgb(i, i, i);
+            }
+            newImage.Palette = palette;
+
+            BitmapData bmpData = b.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadOnly,
+                PixelFormat.Format1bppIndexed);
+            BitmapData newBmpData = newImage.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.WriteOnly,
+                PixelFormat.Format8bppIndexed);
+            int stride1 = bmpData.Stride;
+            int stride8 = newBmpData.Stride;
+            int nOffset = stride8 - newImage.Width;
+            System.IntPtr Scan0 = bmpData.Scan0;
+            System.IntPtr Scan1 = newBmpData.Scan0;
+            
+            
+            unsafe
+            {
+                byte* p = (byte*)(void*)Scan0;
+                byte* pNew = (byte*)(void*)Scan1;
+                for (int y = 0; y < height; y++)
+                {
+                    for (int x = 0; x < width; x++)
+                    {
+                        int index = x / 8;
+                        int bitOffset = 7 - (x % 8); 
+
+                        byte bitValue = (byte)((p[index] >> bitOffset) & 0x01);
+
+                        byte grayscaleValue = (byte)(bitValue * 255);
+
+                        pNew[0] = grayscaleValue;
+                        ++pNew;
+                    }
+                    p += stride1; 
+                    pNew += nOffset;
+                }
+            }
+            b.UnlockBits(bmpData);
+            newImage.UnlockBits(newBmpData);
+            return newImage;
+        }
         
         public static Bitmap HorizontalCon(Bitmap b, Bitmap c)
         {
@@ -64,9 +116,13 @@ namespace Task2
             {
                 b8 = b;
             }
+            else if (b.PixelFormat == PixelFormat.Format1bppIndexed)
+            {
+                b8 = Convert1bit(b);
+            }
             else if (b.PixelFormat == PixelFormat.Format24bppRgb)
             {
-                b8 = Convert24(b);
+                b8 = Convert24bit(b);
             }
             else
             {
@@ -76,9 +132,13 @@ namespace Task2
             {
                 c8 = c;
             }
+            else if (c.PixelFormat == PixelFormat.Format1bppIndexed)
+            {
+                c8 = Convert1bit(c);
+            }
             else if (c.PixelFormat == PixelFormat.Format24bppRgb)
             {
-                c8 = Convert24(c);
+                c8 = Convert24bit(c);
             }
             else
             {
@@ -159,9 +219,13 @@ namespace Task2
             {
                 b8 = b;
             }
+            else if (b.PixelFormat == PixelFormat.Format1bppIndexed)
+            {
+                b8 = Convert1bit(b);
+            }
             else if (b.PixelFormat == PixelFormat.Format24bppRgb)
             {
-                b8 = Convert24(b);
+                b8 = Convert24bit(b);
             }
             else
             {
@@ -171,9 +235,13 @@ namespace Task2
             {
                 c8 = c;
             }
+            else if (c.PixelFormat == PixelFormat.Format1bppIndexed)
+            {
+                c8 = Convert1bit(c);
+            }
             else if (c.PixelFormat == PixelFormat.Format24bppRgb)
             {
-                c8 = Convert24(c);
+                c8 = Convert24bit(c);
             }
             else
             {
