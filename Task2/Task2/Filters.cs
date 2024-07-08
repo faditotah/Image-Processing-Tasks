@@ -165,9 +165,6 @@ namespace Task2
             System.IntPtr ScanC = bmDataC.Scan0;
             System.IntPtr ScanN = bmDataN.Scan0;
 
-            int nOffsetB = bmDataB.Stride - b.Width;
-            int nOffsetC = bmDataC.Stride - c.Width;
-            int nOffsetN = bmDataN.Stride - newImage.Width;
             int widthB = b8.Width; int heightB = b8.Height; int strideB = bmDataB.Stride;
             int widthC = c8.Width; int heightC = c8.Height; int strideC = bmDataC.Stride;
             int widthN = newImage.Width; int heightN = newImage.Height; int strideN = bmDataN.Stride;
@@ -268,9 +265,6 @@ namespace Task2
             System.IntPtr ScanC = bmDataC.Scan0;
             System.IntPtr ScanN = bmDataN.Scan0;
             
-            int nOffsetB = bmDataB.Stride - b8.Width;
-            int nOffsetC = bmDataC.Stride - c8.Width;
-            int nOffsetN = bmDataN.Stride - newImage.Width;
             int widthB = b8.Width; int heightB = b8.Height; int strideB = bmDataB.Stride;
             int widthC = c8.Width; int heightC = c8.Height; int strideC = bmDataC.Stride;
             int widthN = newImage.Width; int heightN = newImage.Height; int strideN = bmDataN.Stride;
