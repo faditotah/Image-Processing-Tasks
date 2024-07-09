@@ -1,0 +1,6 @@
+/home/fadi/Desktop/Assignments/Task6/Task6/obj/x86/Debug/Task6.csproj.AssemblyReference.cache
+/home/fadi/Desktop/Assignments/Task6/Task6/obj/x86/Debug/Task6.csproj.CoreCompileInputs.cache
+/home/fadi/Desktop/Assignments/Task6/Task6/bin/Debug/Task6.exe
+/home/fadi/Desktop/Assignments/Task6/Task6/bin/Debug/Task6.pdb
+/home/fadi/Desktop/Assignments/Task6/Task6/obj/x86/Debug/Task6.exe
+/home/fadi/Desktop/Assignments/Task6/Task6/obj/x86/Debug/Task6.pdb
