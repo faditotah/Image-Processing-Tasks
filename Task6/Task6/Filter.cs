@@ -7,7 +7,6 @@ namespace Task6
 {
     public class BitmapFilter
     {
-
         private static int[] Offset(Bitmap b)                                                   // Determine size of white boundaries
         {
             BitmapData bmData = b.LockBits(new Rectangle(0, 0, b.Width, b.Height),          // Lock in input bitmap (Bitmap would have already been converted to 8bit)
@@ -203,13 +202,8 @@ namespace Task6
             newImage.UnlockBits(bmData);                                                      // Unlock bitmap data from memory
             return newImage;                                                                  // Return binarized imag
         }
-        public static Bitmap Convert24bitTo8Bit(Bitmap b)                                      // Converts 24bit bitmap to 8bit
+        private static Bitmap Convert24bitTo8Bit(Bitmap b)                                      // Converts 24bit bitmap to 8bit
         {
-            if (b.PixelFormat != PixelFormat.Format24bppRgb)                                   // Check input before proceeding
-            {
-                throw new ArgumentException("Filter can only convert 24bit images");
-            }
-
             Bitmap bit8 = new Bitmap(b.Width, b.Height, PixelFormat.Format8bppIndexed);         // Create 8bit Bitmap for new Image
 
             ColorPalette palette = bit8.Palette;                                                // Set color palette of new image to gray scale
@@ -253,12 +247,8 @@ namespace Task6
             bit8.UnlockBits(newBmpData);
             return bit8;                                                                        // Return 8bit image
         }
-        public static Bitmap Convert1BitTo8Bit(Bitmap b)                                       // Converts 1bit bitmap to 8bit
+        private static Bitmap Convert1BitTo8Bit(Bitmap b)                                       // Converts 1bit bitmap to 8bit
         {
-            if (b.PixelFormat != PixelFormat.Format1bppIndexed)                                    // Check input bitmap format
-            {
-                throw new ArgumentException(" Input image must be 1bit");
-            }
             int width = b.Width;                                                                // Assign width and height of 1bit input to int variables                                                         
             int height = b.Height;
 
