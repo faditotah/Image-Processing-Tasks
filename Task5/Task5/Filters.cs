@@ -61,7 +61,7 @@ namespace Task5
         } 
         public static Bitmap Convert1BitTo8Bit(Bitmap b)                                        // Converts 1bit bitmap to 8bit
         {
-            if (b.PixelFormat != PixelFormat.Format24bppRgb)                                    // Check input bitmap format
+            if (b.PixelFormat != PixelFormat.Format1bppIndexed)                                    // Check input bitmap format
             {
                 throw new ArgumentException(" Input image must be 1bit");
             }
