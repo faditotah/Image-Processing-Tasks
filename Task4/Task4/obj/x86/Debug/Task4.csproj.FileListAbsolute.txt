@@ -1,0 +1,6 @@
+/home/fadi/Desktop/Assignments/Task4/Task4/obj/x86/Debug/Task4.csproj.AssemblyReference.cache
+/home/fadi/Desktop/Assignments/Task4/Task4/obj/x86/Debug/Task4.csproj.CoreCompileInputs.cache
+/home/fadi/Desktop/Assignments/Task4/Task4/bin/Debug/Task4.exe
+/home/fadi/Desktop/Assignments/Task4/Task4/bin/Debug/Task4.pdb
+/home/fadi/Desktop/Assignments/Task4/Task4/obj/x86/Debug/Task4.exe
+/home/fadi/Desktop/Assignments/Task4/Task4/obj/x86/Debug/Task4.pdb
