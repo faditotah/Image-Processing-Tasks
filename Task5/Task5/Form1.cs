@@ -210,7 +210,7 @@ namespace Task5
         {
             KernelDlg dlg = new KernelDlg();
             dlg.nValue1 = dlg.nValue2 = 0;
-            int condition = 0;
+            bool condition = true;
             if (DialogResult.OK == dlg.ShowDialog())
             {
                 m_Undo = (Bitmap)m_Bitmap.Clone();
@@ -224,7 +224,7 @@ namespace Task5
         {
             KernelDlg dlg = new KernelDlg();
             dlg.nValue1 = dlg.nValue2 = 0;
-            int condition = 1;
+            bool condition = false;
             if (DialogResult.OK == dlg.ShowDialog())
             {
                 m_Undo = (Bitmap)m_Bitmap.Clone();
