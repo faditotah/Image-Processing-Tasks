@@ -215,7 +215,7 @@ namespace Task5
             paddedIm.UnlockBits(bmpData1);
             return paddedIm;
         } 
-        public static Bitmap Morphology(Bitmap b, int row, int col, int condition)              // Dilation of bitmap using kernel size as input
+        public static Bitmap Morphology(Bitmap b, int row, int col, bool condition)              // Dilation of bitmap using kernel size as input
         {
             if ((row % 2 == 0) || (col % 2 == 0))                                                // Kernel must have odd rows and columns to ensure presence of center kernel
             {
@@ -250,7 +250,7 @@ namespace Task5
             }
 
             Bitmap paddedIm;
-            if (condition == 0)
+            if (condition)
                 paddedIm = AddZeroPadding(newImage);                                             // Add padding around 8bit image for reading
             else
                 paddedIm = Add255Padding(newImage);                                              // Add padding around 8bit image for reading
@@ -290,7 +290,7 @@ namespace Task5
                                 ++num;
                             }
                         }
-                        if (condition == 0) 
+                        if (condition) 
                             pNew[0] = group.Max();                                              // Assign the max byte to the corresponding byte in the output image
                         else
                             pNew[0] = group.Min(); 
