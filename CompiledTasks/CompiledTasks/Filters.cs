@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
@@ -975,74 +975,6 @@ namespace CompiledTasks
         }
 
         // Milestone: Detection of Objects in Bitmap //
-        public static Bitmap DetectEdge(Bitmap b, int thresh)
-        {
-            Bitmap output; // Intialize new bitmap for output
-            if (b.PixelFormat == PixelFormat.Format8bppIndexed) // Ensure new bitmap is an 8bit replica of input image
-            {
-                output = (Bitmap)b.Clone();
-            }
-            else if (b.PixelFormat == PixelFormat.Format1bppIndexed || b.PixelFormat == PixelFormat.Format24bppRgb)
-            {
-                output = ConvertTo8Bit(b); // Make name specific
-            }
-            else
-            {
-                throw new ArgumentException(" Image type is not supported. Must be 1, 8, or 24bit");
-            }
-
-            Bitmap input;
-            //if (condition)
-            input = AddPadding(output, 255); // Add padding around 8bit image for reading
-            //else
-            // paddedIm = Add255Padding(newImage);                                              // Add padding around 8bit image for reading
-
-            BitmapData bmData = input.LockBits(new Rectangle(0, 0, input.Width, // Lock bitmap data into memory
-                input.Height), ImageLockMode.ReadOnly, PixelFormat.Format8bppIndexed);
-            BitmapData newbmData = output.LockBits(new Rectangle(0, 0, output.Width,
-                output.Height), ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed);
-
-            System.IntPtr Scan0 = bmData.Scan0; // Retrieve first pixel data address
-            System.IntPtr Scan1 = newbmData.Scan0;
-
-            int stride0 = bmData.Stride; // Assign bitmap strides to 
-            int stride1 = newbmData.Stride;
-
-            int nOffset1 = stride1 - output.Width; // Calculate output image offset
-
-            int height = output.Height; // Assign output image parameters to integer variables
-            int width = output.Width;
-            byte[] group = new byte [4]; // Create a byte matrix with size of kernel
-
-            unsafe
-            {
-                byte* pIn = (byte*)(void*)Scan0; // Pointer to padded image for reading
-                byte* pOut = (byte*)(void*)Scan1; // Pointer to image being manipulated
-                for (int y = 0; y < height; ++y) // Iterate over pixels of output image
-                {
-                    for (int x = 0; x < width; ++x)
-                    {
-                        int byteNum0 = x + y * stride0;
-                        int byteNum1 = byteNum0 + stride0;
-                        int byteNum2 = byteNum1 + stride0;
-                        group[0] = (byte)Math.Abs(pIn[byteNum0] - pIn[byteNum2 + 2]); // Copy the first i by j pixels into the byte matrix
-                        group[1] = (byte)Math.Abs(pIn[byteNum0 + 1] - pIn[byteNum2 + 1]);
-                        group[2] = (byte)Math.Abs(pIn[byteNum0 + 2] - pIn[byteNum2]);
-                        group[3] = (byte)Math.Abs(pIn[byteNum1] - pIn[byteNum1 + 2]);
-                        int pixel = group.Max();
-                        if (pixel < thresh) pixel = 0;
-                        pOut[0] = (byte)pixel; // Assign the max byte to the corresponding byte in the output image
-                        ++pOut; // Increment to the next byte
-                    }
-
-                    pOut += nOffset1; // Skip offset
-                }
-            }
-
-            input.UnlockBits(bmData); // Unlock bitmaps data and return dilated image
-            output.UnlockBits(newbmData);
-            return output;
-        }
         private static Bitmap[] LabelAndExtract(Bitmap image)
         {
             int width = image.Width;
@@ -1052,9 +984,14 @@ namespace CompiledTasks
             int stride = imageData.Stride;
             IntPtr scan0 = imageData.Scan0;
 
-            byte currentLabel = 1;
+            //int currentLabel = 1;
+            byte byteLabel = 1;
             List<byte> labels = new List<byte>();
             bool[,] checks = new bool[width, height];
+
+            int[,] matLabels = new int[width, height];
+
+            
             unsafe
             {
                 byte* p = (byte*)(void*)scan0;
@@ -1080,11 +1017,11 @@ namespace CompiledTasks
                                 Point point = queue.Dequeue();
                                 int px = point.X;
                                 int py = point.Y;
-
                                 if (px >= 0 && px < width && py >= 0 && py < height && p[px + py * stride] == 0 && !checks[px, py])
                                 {
                                     // Assign label to the current pixel
-                                    p[px + py * stride] = currentLabel;
+                                    p[px + py * stride] = byteLabel;
+                                    //matLabels[px, py] = currentLabel;
                                     checks[px, py] = true;
 
                                     // Enqueue neighboring pixels if they are valid and not checked
@@ -1098,18 +1035,19 @@ namespace CompiledTasks
                                     if (px - 1 >= 0 && py - 1 >= 0 && !checks[px- 1, py - 1]) queue.Enqueue(new Point(px - 1, py - 1));
                                 }
                             }
-                    
+                            
                             // Add current label to labels if it hasn't been added yet
-                            if (!labels.Contains(currentLabel))
+                            if (!labels.Contains(byteLabel))
                             {
-                                labels.Add(currentLabel);
+                                labels.Add(byteLabel);
                             }
-
+                            
                             // Increment label for the next component
-                            currentLabel++;
+                            //currentLabel++;
+                            byteLabel++;
 
                             // Early exit if we have already used up all possible labels (255)
-                            if (currentLabel == 256)
+                            if (byteLabel == 256)
                             {
                                 throw new ArgumentException("Too many shapes detected");
                             }
@@ -1119,17 +1057,16 @@ namespace CompiledTasks
             }
 
             image.UnlockBits(imageData);
-            Bitmap[] cropped = ExtractShapes(image, labels);
+            Bitmap[] cropped = ExtractShapes(image, labels ,matLabels);
 
             return (cropped);
         }
-        private static Bitmap[] ExtractShapes(Bitmap b, List<byte> labels)
+        private static Bitmap[] ExtractShapes(Bitmap b, List<byte> labels , int[,] matLabels)
         {
             BitmapData bmData = b.LockBits(new Rectangle(0, 0, b.Width, // Lock bitmap data into memory
                 b.Height), ImageLockMode.ReadOnly, PixelFormat.Format8bppIndexed);
             int stride = bmData.Stride;
             IntPtr scan = bmData.Scan0;
-
             int width = b.Width;
             int height = b.Height;
             int size = labels.Count;
@@ -1159,14 +1096,13 @@ namespace CompiledTasks
                         {
 
                             int byteNum = byteLine + x;
-                            if (p[byteNum] == labels[n]) pMini[byteNum] = p[byteNum];
+                            if (p[byteNum] == labels[n]) pMini[byteNum] = 0;
                             else pMini[byteNum] = 255;
                         }
                     }
 
                     images[n].UnlockBits(miniData);
                     images[n] = RemoveWhiteBoundary(images[n], 0);
-                    images[n] = Threshold(images[n], 200);
                 }
 
                 b.UnlockBits(bmData);
@@ -1205,6 +1141,7 @@ namespace CompiledTasks
                     {
                         for (int x = 0; x < width; ++x)
                         {
+                            int midPoint = (width / 2) + (height / 2) * miniStride;
                             int byteNum = x + y * miniStride;
                             if (pMini[byteNum] == 0) blackCount += 1;
                             if (pMini[byteNum] == 0 && y == 0) topCount+=1;
@@ -1213,10 +1150,33 @@ namespace CompiledTasks
                             if (pMini[byteNum] == 0 && x == width - 1) rightCount+=1;
                             if (x == width - 1 && y == height - 1)
                             {
-                                if (topCount != bottomCount || leftCount != rightCount && (pMini[0] == 255 || pMini[width] == 255 || pMini[miniStride * height] == 255 || pMini[width + miniStride*height] == 255)) labels[m] = "Triangle";
-                                if (topCount == bottomCount && rightCount == leftCount && width == height) labels[m] = "Square";
-                                if (topCount == bottomCount && rightCount == leftCount&& width != height) labels[m] = "Rectangle";
-                                if (pMini[0] == 255 && pMini[width] == 255 && pMini[miniStride * height] == 255 && pMini[width + miniStride*height] == 255 && topCount > 2 && topCount < width && bottomCount < width) labels[m] = "Circle";
+                                double ratio = (double)blackCount / (pixSize);
+                                if (topCount != bottomCount || leftCount != rightCount && (pMini[0] == 255 ||
+                                        pMini[width] == 255 || pMini[miniStride * height] == 255 ||
+                                        pMini[width + miniStride * height] == 255))
+                                {
+                                    labels[m] = "Triangle";
+                                    if (ratio > 0.4) labels[m] = "Black Triangle";
+                                }
+
+                                if (topCount/bottomCount == 1 && rightCount / leftCount == 1 && width == height)
+                                {
+                                    labels[m] = "Square";
+                                    if (pMini[midPoint] == 0) labels[m] = "Black Square";
+
+                                }
+                                if (topCount > 2 && bottomCount > 2 && leftCount > 2 && rightCount > 2 && topCount == bottomCount && leftCount == rightCount && pMini[0] == 255)
+                                {
+                                    labels[m] = "Circle";
+                                    if (pMini[midPoint] == 0) labels[m] = "Black Circle";
+
+                                }
+                                if (topCount/bottomCount == 1 && rightCount/leftCount == 1 && width != height)
+                                {
+                                    labels[m] = "Rectangle";
+                                    if (pMini[midPoint] == 0) labels[m] = "Black Rectangle";
+
+                                }
                             }
                         }
                     }
