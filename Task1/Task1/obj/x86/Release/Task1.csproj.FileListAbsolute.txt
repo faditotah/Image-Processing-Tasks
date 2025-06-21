@@ -1,3 +1,0 @@
-/home/fadi/Desktop/Assignments/Task1/Task1/Task1/Task1/bin/Release/Task1.exe
-/home/fadi/Desktop/Assignments/Task1/Task1/Task1/Task1/obj/x86/Release/Task1.csproj.CoreCompileInputs.cache
-/home/fadi/Desktop/Assignments/Task1/Task1/Task1/Task1/obj/x86/Release/Task1.exe
